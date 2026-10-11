@@ -21,7 +21,7 @@ Ihar Vauchok
 
 ```bash
 git clone https://github.com/c1p0LL1n0/safe-c-library.git
-cd safe-c-library
+cd save_C_safe
 
 # Авто-тесты (главное!)
 gcc -Wall -Wextra -std=c99 safe_c_verify.c -o verify && ./verify
@@ -36,20 +36,20 @@ gcc -Wall -Wextra -std=c99 safe_stdlib_demo.c -o demo2 && ./demo2
 
 ```c
 typedef struct s_safe_str {
-    char        *ptr;           // указатель на буфер
-    const int   max_capacity;   // жёсткий предел (только чтение)
-    int         len;            // текущая длина строки
+    char        *ptr;           // pointer to buffer
+    const int   max_capacity;   // limit (readonly)
+    int         len;            // current stringlength
 } t_safe_str;
 
-// Конструктор без malloc — составной литерал на стеке
+// Constructer without malloc — compaund litteral on stack
 #define MAKE_SAFE_STR(size) \
     (t_safe_str){ .ptr = (char[size]){0}, .max_capacity = size, .len = 0 }
 ```
-## API: `safe_c.c` — 31 функция
+## API: `safe_c.c` — 31 function
 
-### Строковые операции
+### String operations
 
-| Функция | Аналог | Возвращает |
+| Function | Analog | Return |
 |---------|--------|------------|
 | `ft_strlen_safe(s)` | `strlen` | `int` — O(1) |
 | `ft_strcpy_safe(dest, src)` | `strcpy` | `t_safe_str*` |
@@ -60,74 +60,74 @@ typedef struct s_safe_str {
 | `ft_strdup_safe(dest, src)` | `strdup` | `t_safe_str*` |
 | `ft_strclear_safe(s)` | — | `t_safe_str*` |
 
-### Сравнение
+### Compare
 
-| Функция | Возвращает |
+| Function | Return |
 |---------|-----------|
 | `ft_strcmp_safe(a, b)` | `<0`, `0`, `>0` |
 | `ft_strncmp_safe(a, b, n)` | `<0`, `0`, `>0` |
 | `ft_strequ_safe(a, b)` | `1`/`0` |
 
-### Поиск
+### Search
 
-| Функция | Аналог |
+| Function | Analog |
 |---------|--------|
 | `ft_strchr_safe(s, c)` | `strchr` |
 | `ft_strrchr_safe(s, c)` | `strrchr` |
 | `ft_strstr_safe(hay, needle)` | `strstr` |
 
-### Подстроки и трансформация
+### Substrings and transformation
 
-| Функция | Примечание |
+| Function | Notes |
 |---------|-----------|
 | `ft_substr_safe(dest, src, start, len)` | |
-| `ft_strtrim_safe(dest, src, set)` | `set=NULL` → пробелы |
+| `ft_strtrim_safe(dest, src, set)` | `set=NULL` → spaces |
 | `ft_toupper_safe(s)` | in-place |
 | `ft_tolower_safe(s)` | in-place |
 | `ft_striteri_safe(s, callback)` | in-place |
 
-### Память
+### Memory
 
-| Функция | Аналог |
+| Function | Analog |
 |---------|--------|
 | `ft_memset_safe(d, c, n)` | `memset` |
 | `ft_memcpy_safe(d, s, n)` | `memcpy` |
 | `ft_memmove_safe(d, s, n)` | `memmove` |
 | `ft_bzero_safe(d)` | `bzero` |
 
-### Числа
+### Numbers
 
 `ft_itoa_safe(n, dest)` → `t_safe_str*`
 
-### Классификация символов
+### Symbols
 
 `ft_isalpha` · `ft_isdigit` · `ft_isalnum` · `ft_isascii` · `ft_isprint` · `ft_isspace` · `ft_toupper` · `ft_tolower`
 
-### Классификация строк
+### Strings
 ## API: `safe_stdlib.c` — 18 функций
 
-Все возвращают `1` (успех) или `0` (ошибка), результат через указатель.
+All return `1` (OK) or `0` (error), result with pointer.
 
-### Безопасная арифметика
+### Safe arythmetic
 
-| Функция | Проверка |
+| Function | Check |
 |---------|----------|
-| `ft_add_safe(a, b, &r)` | `a + b` без переполнения |
-| `ft_sub_safe(a, b, &r)` | `a - b` без переполнения |
-| `ft_mul_safe(a, b, &r)` | `a * b` без переполнения |
-| `ft_div_safe(a, b, &r)` | `b != 0`, не `INT_MIN / -1` |
-| `ft_mod_safe(a, b, &r)` | `b != 0`, не `INT_MIN % -1` |
-| `ft_long_to_int_safe(n, &r)` | `n` помещается в `int` |
+| `ft_add_safe(a, b, &r)` | `a + b` without overflow |
+| `ft_sub_safe(a, b, &r)` | `a - b` without overflow |
+| `ft_mul_safe(a, b, &r)` | `a * b` without overflow |
+| `ft_div_safe(a, b, &r)` | `b != 0`, not `INT_MIN / -1` |
+| `ft_mod_safe(a, b, &r)` | `b != 0`, not `INT_MIN % -1` |
+| `ft_long_to_int_safe(n, &r)` | `n` enough for `int` |
 
-### Конвертация строк
+### String conversion
 
-| Функция | Аналог | Возврат |
+| Function | Analog | Return |
 |---------|--------|---------|
 | `ft_atoi_safe(str, &r)` | `atoi` | 1/0 |
 | `ft_strtoi_safe(str, &end, &r)` | `strtol` | 1/0 |
 | `ft_atol_safe(str, &r)` | `atol` | 1/0 |
 
-### Динамический вектор
+### Dynamical vector
 
 ```c
 typedef struct s_safe_vec {
@@ -137,11 +137,11 @@ typedef struct s_safe_vec {
 
 `ft_vec_new(sz, cap)` · `ft_vec_get(v, i)` · `ft_vec_push(v, e)` · `ft_vec_pop(v)` · `ft_vec_free(v)`
 
-### Файлы / форматирование / память
+### Files / formatting / memory
 
 `ft_fopen_safe` · `ft_fgets_safe` · `ft_getline_safe` · `ft_snprintf_safe` · `ft_qsort_safe` · `ft_malloc_safe` · `ft_calloc_safe` · `ft_free_safe`
 
-## Пример
+## Example
 
 ```c
 #define SAFE_C_STDIO
@@ -169,30 +169,29 @@ int main(void) {
 }
 ```
 
-## Свойства безопасности
+## Safety
 
-- **NULL-safe** — ни одна функция не падает на `NULL`
-- **Bound-check** — ни один байт не пишется за `max_capacity`
-- **Всегда `\0`** — гарантированная нуль-терминация
-- **Нет malloc** в `safe_c.c` — только стековые буферы
-- **O(1) длина** — поле `len` в структуре
-- **Составные литералы** — буферы на лету: `&(t_safe_str){.ptr=(char[32]){0}, .max_capacity=32}`
-- **Коды ошибок** — `safe_stdlib.c`: 1 = успех, 0 = ошибка
+- **NULL-safe** — no one  return `NULL`
+- **Bound-check** — no one byte writes in `max_capacity`
+- **Always `\0`** — guaranted 0 terminated
+- **No malloc** в `safe_c.c` — only stack letters
+- **O(1) Len** — field `len` in structure
+- **Compound literals** — buffers on the fly: `&(t_safe_str){.ptr=(char[32]){0}, .max_capacity=32}`
+- **Error nums** — `safe_stdlib.c`: 1 = success, 0 = fault
 
-## Компиляция
+## Compilation
 
 ```bash
 gcc -Wall -Wextra -std=c99 safe_c_verify.c -o verify
 ```
 
-Только `#include "safe_c.c"` или `#include "safe_stdlib.c"` — без внешних зависимостей.
-## ⚠️ Дисклеймер
+Only `#include "safe_c.c"` or `#include "safe_stdlib.c"` — without external dependencies.
+## ⚠️ Discleimer
 
-> **Используйте с осторожностью.** Эта библиотека — fun проект на C. Автор не даёт гарантий отсутствия багов, уязвимостей или undefined behavior. Перед использованием в production-окружении проведите собственный аудит кода.
->
-> Библиотека прошла **99 програмных тестов** (64 — `safe_c`, 35 — `safe_stdlib`) и обрабатывает все известные краевые случаи, но абсолютная безопасность не может быть гарантирована ввиду сложности языка C и платформенных различий.
+Use with caution. This library is a fun project written in C. The author provides no guarantees against bugs, security vulnerabilities, or undefined behavior. Please conduct your own code audit before deploying this library to any production environment.
+Although the library has successfully passed 99 programmatic tests (64 for safe_c, 35 for safe_stdlib) and handles all known edge cases, absolute safety cannot be guaranteed due to the inherent complexities of the C programming language and platform-specific variances.
 
-## Лицензия (MIT)
+## License (MIT)
 
 ```
 MIT License
@@ -217,21 +216,18 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
+TL;DR: Do whatever you want with the code—use it, modify it, redistribute it. Just preserve the authorship notice. Offered without warranties.
 
-**Коротко:** делайте с кодом что хотите — используйте, модифицируйте, распространяйте. Указывайте авторство. Без гарантий.
+How to Contribute
 
-## Как внести вклад
-
-Pull request'ы приветствуются! Что можно улучшить:
-
-- 🐛 **Нашли баг?** — откройте issue, приложите минимальный пример
-- 🔧 **Новые функции** — обёртки для оставшихся опасных функций (`strtok`, `realpath`, `system`, …)
-- 🧪 **Тесты** — новые краевые случаи, fuzz-тестирование
-- 📦 **CMake / Makefile** — система сборки
-- 🌐 **Безопасная работа с сетью** — обёртки `socket`, `bind`, `connect`
-- 🧵 **Потокобезопасность** — `_r`-версии функций
-
-**Стиль кода:** никакого `malloc` в `safe_c.c`, обязательная проверка `NULL` и границ буфера, все возвращаемые значения осмысленны (нет `void`).
+Pull requests are highly encouraged! Areas that could use improvement:
+• 🐛 Found a bug? — Open an issue and attach a minimal reproducible example (MRE).
+• 🔧 New Features — Implement safe wrappers for remaining risky functions (strtok, realpath, system, etc.).
+• 🧪 Testing — Write test cases covering new edge cases or establish fuzz testing.
+• 📦 Build Systems — Add comprehensive CMakeLists.txt or Makefile integration.
+• 🌐 Safe Networking — Implement security-centric wrappers around socket, bind, and connect.
+• 🧵 Thread Safety — Provide thread-safe _r variants for applicable routines.
+Coding Style: Absolutely no heap memory allocation (malloc) inside safe_c.c. Mandatory NULL pointers and boundary checking are required for all contributions. Every return value must carry explicit meaning (no void routines).
 
 
 
