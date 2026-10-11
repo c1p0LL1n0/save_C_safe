@@ -1,5 +1,3 @@
-Ihar Vauchok
-
 ## safe-c-library
 
 A completely safe replacement for the C standard library—no malloc, no buffer overflows, no NULL crashes.
