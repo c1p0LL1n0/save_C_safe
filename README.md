@@ -1,38 +1,27 @@
 Ihar Vauchok
 
-# safe-c-library
+## safe-c-library
 
-Полностью безопасная замена стандартной библиотеки C — без `malloc`, без переполнений буфера, без падений на `NULL`.
+A completely safe replacement for the C standard library—no malloc, no buffer overflows, no NULL crashes.
+99 programmatic tests—every single edge case is verified.
 
-**99 програмных тестов** — каждый краевой случай проверен.
+# Directory Structure
 
-## Структура
-
-| Файл | Назначение | Строк |
-|------|-----------|-------|
-| `safe_c.c` | Безопасные строки, память, itoa, классификация | 676 |
-| `safe_c_demo.c` | Визуальная демонстрация (40+ тестов) | ~280 |
-| `safe_c_verify.c` | Программный авто-верификатор (64 теста) | 200 |
-| `safe_stdlib.c` | Врапперы stdlib: арифметика, atoi, вектор, файлы, snprintf, qsort, malloc | 259 |
-| `safe_stdlib_demo.c` | Визуальная демонстрация stdlib (20+ тестов) | ~115 |
-| `safe_stdlib_verify.c` | Программный авто-верификатор stdlib (35 тестов) | 90 |
-
-## Быстрый старт
 
 ```bash
 git clone https://github.com/c1p0LL1n0/safe-c-library.git
 cd save_C_safe
 
-# Авто-тесты (главное!)
+# Auto-tests (important!)
 gcc -Wall -Wextra -std=c99 safe_c_verify.c -o verify && ./verify
 gcc -Wall -Wextra -std=c99 safe_stdlib_verify.c -o verify2 && ./verify2
 
-# Визуальные демо
+# Visual demo
 gcc -Wall -Wextra -std=c99 safe_c_demo.c -o demo && ./demo
 gcc -Wall -Wextra -std=c99 safe_stdlib_demo.c -o demo2 && ./demo2
 ```
 
-## Структура `t_safe_str`
+## Structure `t_safe_str`
 
 ```c
 typedef struct s_safe_str {
@@ -41,7 +30,7 @@ typedef struct s_safe_str {
     int         len;            // current stringlength
 } t_safe_str;
 
-// Constructer without malloc — compaund litteral on stack
+// Constructer without malloc — compound litteral on stack
 #define MAKE_SAFE_STR(size) \
     (t_safe_str){ .ptr = (char[size]){0}, .max_capacity = size, .len = 0 }
 ```
